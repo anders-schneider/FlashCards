@@ -89,4 +89,8 @@ public class StudyList {
     	}
     	return result;
     }
+    
+    public void shuffleOrder() {
+    	
+    }
 }
