@@ -28,6 +28,10 @@ public class StudyGui extends JFrame {
 	JPanel topPanel;
 	JPanel bottomPanel;
 	JLabel stateDisplay;
+	JTextField capitolTextField;
+	JLabel progressDisplay;
+	JButton submitButton;
+	JButton quitButton;
 	
     public static void main(String[] args) {
     	startWindow = new StudyGui();
@@ -52,6 +56,7 @@ public class StudyGui extends JFrame {
 				studyList.load();
 				mainWindow = new StudyGui();
 				mainWindow.createMainWindow();
+				startWindow.dispatchEvent(new WindowEvent(startWindow, WindowEvent.WINDOW_CLOSING));
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
@@ -66,8 +71,24 @@ public class StudyGui extends JFrame {
     	setLayout(new BorderLayout());
     	add(topPanel, BorderLayout.NORTH);
     	add(bottomPanel, BorderLayout.SOUTH);
-    	topPanel.setLayout(new GridLayout());
+    	int rows = 4;
+    	int columns = 2;
+    	int separation = 30;
+    	topPanel.setLayout(new GridLayout(rows, columns, separation, separation));
     	bottomPanel.setLayout(new BorderLayout());
-    	stateDisplay = new JLabel("State: ");
+    	stateDisplay = new JLabel("Pennsylvania");
+    	capitolTextField = new JTextField("Harrisburg");
+    	progressDisplay = new JLabel("Progress: 2/3");
+       	submitButton = new JButton("Submit");
+    	quitButton = new JButton("Quit");
+    	
+    	topPanel.add(new JLabel("State:"));
+    	topPanel.add(stateDisplay);
+    	topPanel.add(new JLabel("Capitol:"));
+    	topPanel.add(capitolTextField);
+    	topPanel.add(progressDisplay);
+    	topPanel.add(submitButton);
+    	topPanel.add(new JPanel());
+    	topPanel.add(quitButton);
     }
 }
