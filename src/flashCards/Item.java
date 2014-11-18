@@ -10,12 +10,14 @@ public class Item {
 
 	String stimulus;
 	String response;
-	int numCorrect;
+	int timesCorrect;
+	boolean isLearned;
 	
     public Item(String stimulus, String response) {
         this.stimulus = stimulus;
         this.response = response;
-        this.numCorrect = 0;
+        this.timesCorrect = 0;
+        this.isLearned = false;
     }
     
     public String getStimulus() {
@@ -35,10 +37,15 @@ public class Item {
     }
     
     public int getTimesCorrect() {
-        return numCorrect;
+        return timesCorrect;
     }
     
     public void setTimesCorrect(int times) {
-        numCorrect = times;
+        timesCorrect = times;
+        if (timesCorrect >= 4) {
+        	isLearned = true;
+        } else {
+        	isLearned = false;
+        }
     }
 }

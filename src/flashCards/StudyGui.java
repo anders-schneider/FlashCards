@@ -24,7 +24,7 @@ public class StudyGui extends JFrame {
 	JButton loadButton;
 	JFileChooser fileChooser;
 	ArrayList<String> linesToStudy;
-	StudyList studyList;
+	StudyList studyList = new StudyList();
 	JPanel topPanel;
 	JPanel bottomPanel;
 	JLabel stateDisplay;
@@ -52,10 +52,14 @@ public class StudyGui extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
-				studyList = new StudyList();
+//				studyList = new StudyList();
 				studyList.load();
+				//System.out.println(studyList.itemArrayList.size());
 				mainWindow = new StudyGui();
+				//System.out.println(studyList.itemArrayList.size());
 				mainWindow.createMainWindow();
+				mainWindow.studyList = startWindow.studyList;
+				//System.out.println(studyList.itemArrayList.size());
 				startWindow.dispatchEvent(new WindowEvent(startWindow, WindowEvent.WINDOW_CLOSING));
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
@@ -64,7 +68,7 @@ public class StudyGui extends JFrame {
     }
     
     void createMainWindow(){
-    	setSize(400, 400);
+    	setSize(250, 250);
     	setVisible(true);
     	topPanel = new JPanel();
     	bottomPanel = new JPanel();
@@ -76,9 +80,9 @@ public class StudyGui extends JFrame {
     	int separation = 30;
     	topPanel.setLayout(new GridLayout(rows, columns, separation, separation));
     	bottomPanel.setLayout(new BorderLayout());
-    	stateDisplay = new JLabel("Pennsylvania");
-    	capitolTextField = new JTextField("Harrisburg");
-    	progressDisplay = new JLabel("Progress: 2/3");
+    	stateDisplay = new JLabel();
+    	capitolTextField = new JTextField();
+    	progressDisplay = new JLabel();
        	submitButton = new JButton("Submit");
     	quitButton = new JButton("Quit");
     	
@@ -90,5 +94,28 @@ public class StudyGui extends JFrame {
     	topPanel.add(submitButton);
     	topPanel.add(new JPanel());
     	topPanel.add(quitButton);
+    	
+    	study();
     }
+
+	private void study() {
+		System.out.println(studyList.itemArrayList.size());
+		int numItems = studyList.itemArrayList.size();
+		boolean allLearned = true;
+		for (int i = 0; i < numItems; i++) {
+			if (!studyList.itemArrayList.get(i).isLearned){
+				allLearned = false;
+			}
+		}
+		if (allLearned){
+			StudyGui congratulationsWindow = new StudyGui();
+			return;
+		}
+		
+		for (int i = 0; i < numItems; i++) {
+			Item item = studyList.itemArrayList.get(i);
+			stateDisplay.setText(item.getStimulus());
+			progressDisplay.setText("Progress: " + i + "/" + numItems);
+		}
+	}
 }
