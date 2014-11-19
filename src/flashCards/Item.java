@@ -48,4 +48,18 @@ public class Item {
         	isLearned = false;
         }
     }
+    
+    @Override
+    public String toString() {
+    	return stimulus + ", " + response;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (!(o instanceof Item)) {
+    		return false;
+    	}
+    	Item otherItem = (Item) o;
+    	return this.toString().equals(otherItem.toString());
+    }
 }

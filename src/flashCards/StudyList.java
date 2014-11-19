@@ -84,7 +84,7 @@ public class StudyList {
     }
     
     public String[] createStringArray() {
-    	String[] result = null;
+    	String [] result = new String[itemArrayList.size()];
     	for (int i = 0; i < itemArrayList.size(); i++){
     		Item item = itemArrayList.get(i);
     		result[i] = item.getStimulus() + ", " + item.getResponse();
@@ -93,10 +93,39 @@ public class StudyList {
     }
     
     public void shuffleOrder() {
-    	for (int i = 0; i < (itemArrayList.size() - 1); i += 2){
-    		Item temp = itemArrayList.get(i);
-    		itemArrayList.set(i, itemArrayList.get(i + 1));
-    		itemArrayList.set(i + 1, temp);
+    	double threshold = 0.5;
+    	for (int i = 0; i < (itemArrayList.size() - 1); i++) {
+    		if(Math.random() < threshold) {
+    			Item temp = itemArrayList.get(i);
+    			itemArrayList.set(i, itemArrayList.get(i + 1));
+        		itemArrayList.set(i + 1, temp);
+    		}
     	}
+    	
+    	
+//    	for (int i = 0; i < (itemArrayList.size() - 1); i += 2){
+//    		Item temp = itemArrayList.get(i);
+//    		itemArrayList.set(i, itemArrayList.get(i + 1));
+//    		itemArrayList.set(i + 1, temp);
+//    	}
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (!(o instanceof StudyList)){
+    		return false;
+    	}
+    	StudyList otherList = (StudyList) o;
+    	
+    	if (itemArrayList.size() != otherList.itemArrayList.size()) {
+    		return false;
+    	}
+    		
+    	for (int i = 0; i < itemArrayList.size(); i++) {
+    		if (! itemArrayList.contains(otherList.itemArrayList.get(i))) {
+    			return false;
+    		}
+    	}
+    	return true;
     }
 }

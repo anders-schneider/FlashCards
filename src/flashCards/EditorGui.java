@@ -18,34 +18,50 @@ import java.util.ArrayList;
  * @author Your Name Goes Here
  */
 public class EditorGui extends JFrame {
-
-	static EditorGui editorGui;
 	
+	JFrame mainFrame;
+	JFrame editWindow;
 	JLabel keySearch;
 	JTextField searchTextField;
 	JLabel searchResultsLabel;
 	JTextArea searchResultsTextArea;
 	JLabel studyListLabel;
 	JList<String> studyListDisplay;
-	JScrollPane studyListDisplayScrollable;
+	JScrollPane listScroll;
 	JButton deleteButton;
 	JButton addButton;
 	JButton editButton;
 	JButton saveButton;
 	JButton saveAsButton;
+	StudyList studyList;
+	JLabel editStimulus;
+	JLabel editResponse;
+	JTextField editStimulusText;
+	JTextField editResponseText;
+	JButton saveChangesButton;
+	Item itemToEdit;
 	
     public static void main(String[] args) {
-    	editorGui = new EditorGui();
-    	editorGui.createWindow();
+    	
+    	new EditorGui().createWindow();
+    	
     }
 
 	private void createWindow() {
-		setSize(400, 500);
-		setVisible(true);
+		studyList = new StudyList();
+		
+		try {
+			studyList.load();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+		}
+		mainFrame = new JFrame();
+		mainFrame.setSize(400, 500);
+		mainFrame.setVisible(true);
 		int rows = 7;
 		int columns = 2;
 		int separation = 30;
-		setLayout(new GridLayout(rows, columns, separation, separation));
+		mainFrame.setLayout(new GridLayout(rows, columns, separation, separation));
 		
 		keySearch = new JLabel("Keyword Search:");
 		searchTextField = new JTextField();
@@ -53,32 +69,96 @@ public class EditorGui extends JFrame {
 		searchResultsTextArea = new JTextArea();
 		studyListLabel = new JLabel("Study List:");
 		String[] jListString = {"A", "B", "C", "D"};
-		studyListDisplay = new JList<String>(jListString);
-		studyListDisplayScrollable = new JScrollPane(studyListDisplay);
+		studyListDisplay = new JList<String>(studyList.createStringArray());
+		studyListDisplay.setVisibleRowCount(10);
+		studyListDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listScroll = new JScrollPane(studyListDisplay);
 		deleteButton = new JButton("Delete");
+		//deleteButton.addActionListener(new DeleteButtonListener());
 		addButton = new JButton("Add");
+		//addButton.addActionListener(new AddButtonListener());
 		editButton = new JButton("Edit");
+		editButton.addActionListener(new EditButtonListener());
 		saveButton = new JButton("Save");
+		//saveButton.addActionListener(new SaveButtonListener());
 		saveAsButton = new JButton("Save as");
+		//saveAsButton.addActionListener(new SaveAsButtonListener());
 		
-		add(keySearch);
-		add(searchTextField);
-		add(searchResultsLabel);
-		add(searchResultsTextArea);
-		add(studyListLabel);
-		add(studyListDisplayScrollable);
-		add(new JPanel());
-		add(deleteButton);
-		add(new JPanel());
-		add(addButton);
-		add(new JPanel());
-		add(editButton);
-		add(saveButton);
-		add(saveAsButton);
+		mainFrame.add(keySearch);
+		mainFrame.add(searchTextField);
+		mainFrame.add(searchResultsLabel);
+		mainFrame.add(searchResultsTextArea);
+		mainFrame.add(studyListLabel);
+		mainFrame.add(listScroll);
+		mainFrame.add(new JPanel());
+		mainFrame.add(deleteButton);
+		mainFrame.add(new JPanel());
+		mainFrame.add(addButton);
+		mainFrame.add(new JPanel());
+		mainFrame.add(editButton);
+		mainFrame.add(saveButton);
+		mainFrame.add(saveAsButton);
 		
 		searchResultsTextArea.setEditable(false);
+		listScroll.setSize(100, 100);
 		
-    	setDefaultCloseOperation(editorGui.EXIT_ON_CLOSE);
+		mainFrame.setDefaultCloseOperation(mainFrame.EXIT_ON_CLOSE);
+		
+		
 	}
+	
+	public void createEditWindow() {
+		editWindow = new JFrame();
+		editWindow.setSize(300, 200);
+		editWindow.setVisible(true);
+		editWindow.setLayout(new GridLayout(3, 2, 10, 10));
+		editWindow.setTitle("Edit an Item");
+		editStimulus = new JLabel("Stimulus:");
+		editResponse = new JLabel("Response:");
+		editStimulusText = new JTextField(10);
+		editResponseText = new JTextField(10);
+		saveChangesButton = new JButton("Save Changes");
+		saveChangesButton.addActionListener(new SaveChangesButtonListener());
+		editWindow.add(editStimulus);
+		editWindow.add(editStimulusText);
+		editWindow.add(editResponse);
+		editWindow.add(editResponseText);
+		editWindow.add(new JPanel());
+		editWindow.add(saveChangesButton);
+		
+		String stringToEdit = studyListDisplay.getSelectedValue();
+		for (int i = 0; i < studyList.itemArrayList.size(); i++) {
+			Item itemToCompare = studyList.itemArrayList.get(i);
+			String stringToCompare = itemToCompare.toString();
+			if (stringToCompare.equals(stringToEdit)) {
+				itemToEdit = itemToCompare;
+				break;
+			}	
+		}
+		editStimulusText.setText(itemToEdit.getStimulus());
+		editResponseText.setText(itemToEdit.getResponse());
+		
+	}
+	
+	class SaveChangesButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String newStimulus = editStimulusText.getText();
+			String newResponse = editResponseText.getText();
+			studyList.modify(itemToEdit, newStimulus, newResponse);
+			studyListDisplay.setListData(studyList.createStringArray());
+			editWindow.dispose();
+		}
+	}
+	class EditButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			createEditWindow();
+			
+			
+			
+				}
+			}
+	
+    }
 
-}

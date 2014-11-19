@@ -129,15 +129,6 @@ public class StudyGui extends JFrame {
 
 	void study() {
 		
-		// check if all items have been learned
-		// if yes -> make a congratulations window pop up and close the mainWindow (ending the program)
-		
-		// scroll through indices until you find one that is not yet learned
-		// if you get to the end of the indices, shuffle the list, set itemIndex to first unlearned item, and start again
-		
-		// update currentItem
-		// update mainWindow to show currentItem 
-		
 		numItems = studyList.itemArrayList.size();
 		boolean allLearned = true;
 		for (int i = 0; i < numItems; i++) {
@@ -207,8 +198,7 @@ public class StudyGui extends JFrame {
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
-		}
-		
+		}	
 	}
 
 	class SaveAsButtonListener implements ActionListener {
@@ -221,7 +211,6 @@ public class StudyGui extends JFrame {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
 		}
-		
 	}
 
 	
@@ -243,7 +232,7 @@ public class StudyGui extends JFrame {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
 		}
-		//mainWindow.dispatchEvent(new WindowEvent(mainWindow, WindowEvent.WINDOW_CLOSING));
+		mainWindow.dispose();
 	}
 
 	public void clearBottomPanel() {
