@@ -1,6 +1,6 @@
 /**
  * Big Questions:
- * What is going on with save/saveAs? (ask Joo and Ted)
+ * What is going on with save/saveAs? (ask TAs)
  * How to end the program appropriately?
  */
 package flashCards;
@@ -21,9 +21,9 @@ import java.util.ArrayList;
  */
 public class StudyGui extends JFrame {
 
-	static StudyGui startWindow; // Why does this have to be "static"?
-	StudyGui mainWindow;
-	StudyGui congratulationsWindow;
+	JFrame startWindow;
+	JFrame mainWindow;
+	JFrame congratulationsWindow;
 	JButton loadButton;
 	ArrayList<String> linesToStudy;
 	StudyList studyList = new StudyList();
@@ -46,29 +46,28 @@ public class StudyGui extends JFrame {
 	JLabel correctResponseLabel;
 	
     public static void main(String[] args) {
-    	startWindow = new StudyGui();
-    	startWindow.createStartWindow();
+    	new StudyGui().createStartWindow();
     }
     
     void createStartWindow(){
-    	setSize(200, 100);
-    	setLayout(new BorderLayout());
+    	startWindow = new JFrame();
+    	startWindow.setSize(200, 100);
+    	startWindow.setLayout(new BorderLayout());
     	loadButton = new JButton ("Load study list");
-    	add(loadButton, BorderLayout.SOUTH);
+    	startWindow.add(loadButton, BorderLayout.SOUTH);
     	loadButton.addActionListener(new LoadButtonListener());
-    	add(new JLabel("Let's get started!"), BorderLayout.NORTH);
-    	setVisible(true);
+    	startWindow.add(new JLabel("Let's get started!"), BorderLayout.NORTH);
+    	startWindow.setVisible(true);
     }
     
     class LoadButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
-				mainWindow = new StudyGui();
-				mainWindow.studyList = new StudyList();
-				mainWindow.studyList.load();
-				mainWindow.createMainWindow();
-				startWindow.dispatchEvent(new WindowEvent(startWindow, WindowEvent.WINDOW_CLOSING));
+				studyList = new StudyList();
+				studyList.load();
+				createMainWindow();
+				startWindow.dispose();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
@@ -76,13 +75,14 @@ public class StudyGui extends JFrame {
     }
     
     void createMainWindow(){
-    	setSize(250, 300);
-    	setVisible(true);
+    	mainWindow = new JFrame();
+    	mainWindow.setSize(250, 300);
+    	mainWindow.setVisible(true);
     	topPanel = new JPanel();
     	bottomPanel = new JPanel();
-    	setLayout(new BorderLayout());
-    	add(topPanel, BorderLayout.NORTH);
-    	add(bottomPanel, BorderLayout.SOUTH);
+    	mainWindow.setLayout(new BorderLayout());
+    	mainWindow.add(topPanel, BorderLayout.NORTH);
+    	mainWindow.add(bottomPanel, BorderLayout.SOUTH);
     	int rows = 5;
     	int columns = 2;
     	int separation = 30;
@@ -121,13 +121,13 @@ public class StudyGui extends JFrame {
     	bottomPanel.add(userResponseLabel, BorderLayout.CENTER);
     	bottomPanel.add(correctResponseLabel, BorderLayout.SOUTH);
     	
-    	setDefaultCloseOperation(mainWindow.EXIT_ON_CLOSE);
+    	mainWindow.setDefaultCloseOperation(mainWindow.EXIT_ON_CLOSE);
     	
     	itemIndex = 0;
     	study();
     }
 
-	private void study() {
+	void study() {
 		
 		// check if all items have been learned
 		// if yes -> make a congratulations window pop up and close the mainWindow (ending the program)
@@ -146,8 +146,7 @@ public class StudyGui extends JFrame {
 			}
 		}
 		if (allLearned){
-			congratulationsWindow = new StudyGui();
-			congratulationsWindow.createCongratulations();
+			createCongratulations();
 		}
 		
 		try{
@@ -195,10 +194,8 @@ public class StudyGui extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			mainWindow.dispose();
 		}
-		
 	}
 
 	class SaveButtonListener implements ActionListener {
@@ -206,7 +203,7 @@ public class StudyGui extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				mainWindow.studyList.save();
+				studyList.save();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
@@ -219,7 +216,7 @@ public class StudyGui extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				mainWindow.studyList.saveAs();
+				studyList.saveAs();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
@@ -229,18 +226,19 @@ public class StudyGui extends JFrame {
 
 	
 	private void createCongratulations() {
+		congratulationsWindow = new JFrame();
 		String[] options = new String [] {"Save", "Save as", "Quit"};
 		int option = JOptionPane.showOptionDialog(congratulationsWindow, "Congratulations! You mastered all the capitals.\nWould you like to save before quitting?", "Option Dialog", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		if (option == 0) {
 			try {
-				mainWindow.studyList.save();
+				studyList.save();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
 		}
 		if (option == 1) {
 			try {
-				mainWindow.studyList.saveAs();
+				studyList.saveAs();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 			}
@@ -252,11 +250,11 @@ public class StudyGui extends JFrame {
 		incorrectLabel.setText("");
 		userResponseLabel.setText("");
 		correctResponseLabel.setText("");
-		setSize(250, 300);
+		mainWindow.setSize(250, 300);
 	}
 
 	public void showAnswer(String userResponse) {
-		setSize(250, 350);
+		mainWindow.setSize(250, 350);
 		incorrectLabel.setText("INCORRECT");
 		userResponseLabel.setText("You entered: " + userResponse);
 		correctResponseLabel.setText("Correct response: " + currentItem.getResponse());

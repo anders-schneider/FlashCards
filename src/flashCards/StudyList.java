@@ -53,7 +53,9 @@ public class StudyList {
 //    	}
     	for (int i = 0; i < linesToStudy.size(); i++) {
         	String itemString = linesToStudy.get(i);
+        	System.out.println(itemString);
         	String[] itemArray = itemString.split(" *\\|\\| *");
+        	System.out.println(itemArray.length);
         	Item newItem = new Item(itemArray[0].trim(), itemArray[1].trim());
         	newItem.setTimesCorrect(Integer.parseInt(itemArray[2].trim()));
         	itemArrayList.add(newItem);
@@ -62,21 +64,20 @@ public class StudyList {
     }
     
     public void save() throws IOException {
-    	ArrayList<String> stringArrayToSave = null;
+    	ArrayList<String> stringArrayToSave = new ArrayList();
     	for (int i = 0; i <itemArrayList.size(); i++) {
     		Item item = itemArrayList.get(i);
-    		String stringToSave = item.getStimulus() + " || " + item.getResponse() + " || " + item.getTimesCorrect() + "\n";
+    		String stringToSave = item.getStimulus() + " || " + item.getResponse() + " || " + item.getTimesCorrect();
     		stringArrayToSave.add(stringToSave);
     	}
         SimpleIO.save(stringArrayToSave);
     }
     
     public void saveAs() throws IOException {
-    	System.out.println("here!");
-    	ArrayList<String> stringArrayToSave = null;
+    	ArrayList<String> stringArrayToSave = new ArrayList();
     	for (int i = 0; i <itemArrayList.size(); i++) {
     		Item item = itemArrayList.get(i);
-    		String stringToSave = item.getStimulus() + " || " + item.getResponse() + " || " + item.getTimesCorrect() + "\n";
+    		String stringToSave = item.getStimulus() + " || " + item.getResponse() + " || " + item.getTimesCorrect();
     		stringArrayToSave.add(stringToSave);
     	}
         SimpleIO.saveAs(stringArrayToSave);
