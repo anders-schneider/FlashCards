@@ -58,24 +58,25 @@ public class StudyList {
         	newItem.setTimesCorrect(Integer.parseInt(itemArray[2].trim()));
         	itemArrayList.add(newItem);
         }
-        
+            	
     }
     
     public void save() throws IOException {
     	ArrayList<String> stringArrayToSave = null;
     	for (int i = 0; i <itemArrayList.size(); i++) {
     		Item item = itemArrayList.get(i);
-    		String stringToSave = item.getStimulus() + " || " + item.getResponse() + " || " + item.getTimesCorrect();
+    		String stringToSave = item.getStimulus() + " || " + item.getResponse() + " || " + item.getTimesCorrect() + "\n";
     		stringArrayToSave.add(stringToSave);
     	}
         SimpleIO.save(stringArrayToSave);
     }
     
     public void saveAs() throws IOException {
+    	System.out.println("here!");
     	ArrayList<String> stringArrayToSave = null;
     	for (int i = 0; i <itemArrayList.size(); i++) {
     		Item item = itemArrayList.get(i);
-    		String stringToSave = item.getStimulus() + " || " + item.getResponse() + " || " + item.getTimesCorrect();
+    		String stringToSave = item.getStimulus() + " || " + item.getResponse() + " || " + item.getTimesCorrect() + "\n";
     		stringArrayToSave.add(stringToSave);
     	}
         SimpleIO.saveAs(stringArrayToSave);
@@ -91,6 +92,10 @@ public class StudyList {
     }
     
     public void shuffleOrder() {
-    	
+    	for (int i = 0; i < (itemArrayList.size() - 1); i += 2){
+    		Item temp = itemArrayList.get(i);
+    		itemArrayList.set(i, itemArrayList.get(i + 1));
+    		itemArrayList.set(i + 1, temp);
+    	}
     }
 }

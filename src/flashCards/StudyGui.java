@@ -1,5 +1,7 @@
 /**
- * 
+ * Big Questions:
+ * What is going on with save/saveAs? (ask Joo and Ted)
+ * How to end the program appropriately?
  */
 package flashCards;
 
@@ -21,16 +23,19 @@ public class StudyGui extends JFrame {
 
 	static StudyGui startWindow; // Why does this have to be "static"?
 	StudyGui mainWindow;
+	StudyGui congratulationsWindow;
 	JButton loadButton;
 	ArrayList<String> linesToStudy;
 	StudyList studyList = new StudyList();
 	JPanel topPanel;
 	JPanel bottomPanel;
 	JLabel stateDisplay;
-	JTextField capitolTextField;
+	JTextField capitalTextField;
 	JLabel progressDisplay;
 	JButton submitButton;
 	JButton quitButton;
+	JButton saveButton;
+	JButton saveAsButton;
 	int itemIndex;
 	Item currentItem;
 	int numItems;
@@ -71,24 +76,26 @@ public class StudyGui extends JFrame {
     }
     
     void createMainWindow(){
-    	setSize(250, 250);
+    	setSize(250, 300);
     	setVisible(true);
     	topPanel = new JPanel();
     	bottomPanel = new JPanel();
     	setLayout(new BorderLayout());
     	add(topPanel, BorderLayout.NORTH);
     	add(bottomPanel, BorderLayout.SOUTH);
-    	int rows = 4;
+    	int rows = 5;
     	int columns = 2;
     	int separation = 30;
     	topPanel.setLayout(new GridLayout(rows, columns, separation, separation));
     	bottomPanel.setLayout(new BorderLayout());
     	
     	stateDisplay = new JLabel();
-    	capitolTextField = new JTextField();
+    	capitalTextField = new JTextField();
     	progressDisplay = new JLabel();
        	submitButton = new JButton("Submit");
     	quitButton = new JButton("Quit");
+    	saveButton = new JButton("Save");
+    	saveAsButton = new JButton("SaveAs");
     	
     	incorrectLabel = new JLabel();
     	userResponseLabel = new JLabel();
@@ -96,13 +103,17 @@ public class StudyGui extends JFrame {
     	
     	submitButton.addActionListener(new SubmitButtonListener());
     	quitButton.addActionListener(new QuitButtonListener());
+    	saveButton.addActionListener(new SaveButtonListener());
+    	saveAsButton.addActionListener(new SaveAsButtonListener());
     	
     	topPanel.add(new JLabel("State:"));
     	topPanel.add(stateDisplay);
-    	topPanel.add(new JLabel("Capitol:"));
-    	topPanel.add(capitolTextField);
+    	topPanel.add(new JLabel("Capital:"));
+    	topPanel.add(capitalTextField);
     	topPanel.add(progressDisplay);
     	topPanel.add(submitButton);
+    	topPanel.add(saveButton);
+    	topPanel.add(saveAsButton);
     	topPanel.add(new JPanel());
     	topPanel.add(quitButton);
     	
@@ -135,9 +146,8 @@ public class StudyGui extends JFrame {
 			}
 		}
 		if (allLearned){
-			StudyGui congratulationsWindow = new StudyGui();
+			congratulationsWindow = new StudyGui();
 			congratulationsWindow.createCongratulations();
-			mainWindow.dispatchEvent(new WindowEvent(mainWindow, WindowEvent.WINDOW_CLOSING));
 		}
 		
 		try{
@@ -159,14 +169,15 @@ public class StudyGui extends JFrame {
 		}
 		
 		stateDisplay.setText(currentItem.getStimulus());
-		progressDisplay.setText("Progress: " + (itemIndex + 1) + "/" + numItems);
+		progressDisplay.setText("Item Number: " + (itemIndex + 1) + "/" + numItems);
 	}
 
 	class SubmitButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String userResponse = capitolTextField.getText();
+			String userResponse = capitalTextField.getText();
+			capitalTextField.setText("");
 			if (currentItem.getResponse().equals(userResponse)) {
 				currentItem.setTimesCorrect(currentItem.getTimesCorrect() + 1);
 				itemIndex++;
@@ -189,17 +200,59 @@ public class StudyGui extends JFrame {
 		}
 		
 	}
+
+	class SaveButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				mainWindow.studyList.save();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+			}
+		}
+		
+	}
+
+	class SaveAsButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				mainWindow.studyList.saveAs();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+			}
+		}
+		
+	}
+
 	
 	private void createCongratulations() {
-		// TODO Auto-generated method stub
-		
+		String[] options = new String [] {"Save", "Save as", "Quit"};
+		int option = JOptionPane.showOptionDialog(congratulationsWindow, "Congratulations! You mastered all the capitals.\nWould you like to save before quitting?", "Option Dialog", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+		if (option == 0) {
+			try {
+				mainWindow.studyList.save();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+			}
+		}
+		if (option == 1) {
+			try {
+				mainWindow.studyList.saveAs();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+			}
+		}
+		//mainWindow.dispatchEvent(new WindowEvent(mainWindow, WindowEvent.WINDOW_CLOSING));
 	}
 
 	public void clearBottomPanel() {
 		incorrectLabel.setText("");
 		userResponseLabel.setText("");
 		correctResponseLabel.setText("");
-		setSize(250, 250);
+		setSize(250, 300);
 	}
 
 	public void showAnswer(String userResponse) {
