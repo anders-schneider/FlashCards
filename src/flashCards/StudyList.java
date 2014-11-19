@@ -36,7 +36,6 @@ public class StudyList {
     
     public void delete(Item item) {
     	itemArrayList.remove(item);
-        
     }
     
     public void modify(Item item, String newStimulus, String newResponse) {
@@ -53,9 +52,7 @@ public class StudyList {
 //    	}
     	for (int i = 0; i < linesToStudy.size(); i++) {
         	String itemString = linesToStudy.get(i);
-        	System.out.println(itemString);
         	String[] itemArray = itemString.split(" *\\|\\| *");
-        	System.out.println(itemArray.length);
         	Item newItem = new Item(itemArray[0].trim(), itemArray[1].trim());
         	newItem.setTimesCorrect(Integer.parseInt(itemArray[2].trim()));
         	itemArrayList.add(newItem);

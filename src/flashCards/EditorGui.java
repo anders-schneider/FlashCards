@@ -21,6 +21,7 @@ public class EditorGui extends JFrame {
 	
 	JFrame mainFrame;
 	JFrame editWindow;
+	JFrame addWindow;
 	JLabel keySearch;
 	JTextField searchTextField;
 	JLabel searchResultsLabel;
@@ -40,6 +41,13 @@ public class EditorGui extends JFrame {
 	JTextField editResponseText;
 	JButton saveChangesButton;
 	Item itemToEdit;
+	Item itemToDelete;
+	JLabel addStimulus;
+	JLabel addResponse;
+	JTextField addStimulusText;
+	JTextField addResponseText;
+	JButton addItemButton;
+	
 	
     public static void main(String[] args) {
     	
@@ -74,15 +82,15 @@ public class EditorGui extends JFrame {
 		studyListDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listScroll = new JScrollPane(studyListDisplay);
 		deleteButton = new JButton("Delete");
-		//deleteButton.addActionListener(new DeleteButtonListener());
+		deleteButton.addActionListener(new DeleteButtonListener());
 		addButton = new JButton("Add");
-		//addButton.addActionListener(new AddButtonListener());
+		addButton.addActionListener(new AddButtonListener());
 		editButton = new JButton("Edit");
 		editButton.addActionListener(new EditButtonListener());
 		saveButton = new JButton("Save");
-		//saveButton.addActionListener(new SaveButtonListener());
+		saveButton.addActionListener(new SaveButtonListener());
 		saveAsButton = new JButton("Save as");
-		//saveAsButton.addActionListener(new SaveAsButtonListener());
+		saveAsButton.addActionListener(new SaveAsButtonListener());
 		
 		mainFrame.add(keySearch);
 		mainFrame.add(searchTextField);
@@ -140,6 +148,41 @@ public class EditorGui extends JFrame {
 		
 	}
 	
+	public void createAddWindow() {
+		addWindow = new JFrame();
+		addWindow.setSize(300, 200);
+		addWindow.setVisible(true);
+		addWindow.setLayout(new GridLayout(3, 2, 10, 10));
+		addWindow.setTitle("Edit an Item");
+		addStimulus = new JLabel("Stimulus:");
+		addResponse = new JLabel("Response:");
+		addStimulusText = new JTextField(10);
+		addResponseText = new JTextField(10);
+		addItemButton = new JButton("Add Item");
+		addItemButton.addActionListener(new AddItemButtonListener());
+		addWindow.add(addStimulus);
+		addWindow.add(addStimulusText);
+		addWindow.add(addResponse);
+		addWindow.add(addResponseText);
+		addWindow.add(new JPanel());
+		addWindow.add(addItemButton);
+		
+	}
+	
+	public void deleteItem() {
+		String stringToDelete = studyListDisplay.getSelectedValue();
+		for (int i = 0; i < studyList.itemArrayList.size(); i++) {
+			Item itemToCompare = studyList.itemArrayList.get(i);
+			String stringToCompare = itemToCompare.toString();
+			if (stringToCompare.equals(stringToDelete)) {
+				itemToDelete = itemToCompare;
+				break;
+			}	
+		}
+		studyList.delete(itemToDelete);
+		studyListDisplay.setListData(studyList.createStringArray());
+	}
+	
 	class SaveChangesButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -150,15 +193,66 @@ public class EditorGui extends JFrame {
 			editWindow.dispose();
 		}
 	}
+	
+	class AddItemButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String newStimulus = addStimulusText.getText();
+			String newResponse = addResponseText.getText();
+			Item itemToAdd = new Item(newStimulus, newResponse);
+			studyList.add(itemToAdd);
+			studyListDisplay.setListData(studyList.createStringArray());
+			addWindow.dispose();
+		}
+	}
+	
 	class EditButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			createEditWindow();
-			
-			
-			
-				}
-			}
+		}
+	}
 	
-    }
+	class AddButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			createAddWindow();
+		}
+	}
 
+	class DeleteButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			deleteItem();
+		}
+	}
+	
+	
+	class SaveButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				studyList.save();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+			}
+		}	
+	}
+
+	class SaveAsButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				studyList.saveAs();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+			}
+		}
+	}
+
+	
+}
+
+	
