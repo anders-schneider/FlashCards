@@ -25,7 +25,7 @@ public class EditorGui extends JFrame {
 	JLabel keySearch;
 	JTextField searchTextField;
 	JLabel searchResultsLabel;
-	JTextField searchResultsTextField;
+	JTextField searchResultsTextField; //Monica changed
 	JLabel studyListLabel;
 	JList<String> studyListDisplay;
 	JScrollPane listScroll;
@@ -48,7 +48,7 @@ public class EditorGui extends JFrame {
 	JTextField addResponseText;
 	JButton addItemButton;
 	
-	
+	//main method to create window
     public static void main(String[] args) {
     	
     	new EditorGui().createWindow();
@@ -73,10 +73,11 @@ public class EditorGui extends JFrame {
 		
 		keySearch = new JLabel("Keyword Search:");
 		searchTextField = new JTextField();
-		//searchTextField.addActionListener(new SearchTextFieldListener());
+		searchTextField.addActionListener(new SearchTextFieldListener()); //Monica added
 		searchResultsLabel = new JLabel("Results:");
 		searchResultsTextField = new JTextField();
 		studyListLabel = new JLabel("Study List:");
+		String[] jListString = {"A", "B", "C", "D"};
 		studyListDisplay = new JList<String>(studyList.createStringArray());
 		studyListDisplay.setVisibleRowCount(10);
 		studyListDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -93,7 +94,7 @@ public class EditorGui extends JFrame {
 		saveAsButton.addActionListener(new SaveAsButtonListener());
 		
 		mainFrame.add(keySearch);
-		//mainFrame.add(searchTextField);
+		mainFrame.add(searchTextField);
 		mainFrame.add(searchResultsLabel);
 		mainFrame.add(searchResultsTextField);
 		mainFrame.add(studyListLabel);
@@ -183,7 +184,7 @@ public class EditorGui extends JFrame {
 		studyListDisplay.setListData(studyList.createStringArray());
 	}
 	
-	
+	//Monica added
 	public void findItem() {
 		String stringToFind = searchTextField.getText();
 		try {
@@ -193,7 +194,8 @@ public class EditorGui extends JFrame {
 			JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 		}
 	}
-	
+		
+	}
 	class SaveChangesButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -238,6 +240,7 @@ public class EditorGui extends JFrame {
 		}
 	}
 	
+	//Monica added
 	class SearchTextFieldListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -270,7 +273,6 @@ public class EditorGui extends JFrame {
 		}
 	}
 
-	
-}
+		}
 
-	
+
