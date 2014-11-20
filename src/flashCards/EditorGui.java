@@ -25,7 +25,7 @@ public class EditorGui extends JFrame {
 	JLabel keySearch;
 	JTextField searchTextField;
 	JLabel searchResultsLabel;
-	JTextField searchResultsTextField;
+	JTextArea searchResultsTextArea;
 	JLabel studyListLabel;
 	JList<String> studyListDisplay;
 	JScrollPane listScroll;
@@ -73,10 +73,10 @@ public class EditorGui extends JFrame {
 		
 		keySearch = new JLabel("Keyword Search:");
 		searchTextField = new JTextField();
-		//searchTextField.addActionListener(new SearchTextFieldListener());
 		searchResultsLabel = new JLabel("Results:");
-		searchResultsTextField = new JTextField();
+		searchResultsTextArea = new JTextArea();
 		studyListLabel = new JLabel("Study List:");
+		String[] jListString = {"A", "B", "C", "D"};
 		studyListDisplay = new JList<String>(studyList.createStringArray());
 		studyListDisplay.setVisibleRowCount(10);
 		studyListDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -93,9 +93,9 @@ public class EditorGui extends JFrame {
 		saveAsButton.addActionListener(new SaveAsButtonListener());
 		
 		mainFrame.add(keySearch);
-		//mainFrame.add(searchTextField);
+		mainFrame.add(searchTextField);
 		mainFrame.add(searchResultsLabel);
-		mainFrame.add(searchResultsTextField);
+		mainFrame.add(searchResultsTextArea);
 		mainFrame.add(studyListLabel);
 		mainFrame.add(listScroll);
 		mainFrame.add(new JPanel());
@@ -107,7 +107,7 @@ public class EditorGui extends JFrame {
 		mainFrame.add(saveButton);
 		mainFrame.add(saveAsButton);
 		
-		searchResultsTextField.setEditable(false);
+		searchResultsTextArea.setEditable(false);
 		listScroll.setSize(100, 100);
 		
 		mainFrame.setDefaultCloseOperation(mainFrame.EXIT_ON_CLOSE);
@@ -183,17 +183,6 @@ public class EditorGui extends JFrame {
 		studyListDisplay.setListData(studyList.createStringArray());
 	}
 	
-	
-	public void findItem() {
-		String stringToFind = searchTextField.getText();
-		try {
-			Item foundItem = studyList.find(stringToFind);
-			searchResultsTextField.setText(foundItem.toString());
-		} catch (IllegalArgumentException e){
-			JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
-		}
-	}
-	
 	class SaveChangesButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -235,13 +224,6 @@ public class EditorGui extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			deleteItem();
-		}
-	}
-	
-	class SearchTextFieldListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			findItem();
 		}
 	}
 	
