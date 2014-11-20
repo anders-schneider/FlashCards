@@ -20,6 +20,9 @@ import java.util.ArrayList;
 public class EditorGui extends JFrame {
 	
 	JFrame mainFrame;
+	JPanel topPanel;
+	JPanel midPanel;
+	JPanel bottomPanel;
 	JFrame editWindow;
 	JFrame addWindow;
 	JLabel keySearch;
@@ -64,12 +67,18 @@ public class EditorGui extends JFrame {
 			JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
 		}
 		mainFrame = new JFrame();
-		mainFrame.setSize(400, 500);
+		mainFrame.setSize(370, 430);
 		mainFrame.setVisible(true);
-		int rows = 7;
-		int columns = 2;
-		int separation = 30;
-		mainFrame.setLayout(new GridLayout(rows, columns, separation, separation));
+//		int rows = 7;
+//		int columns = 2;
+//		int separation = 30;
+//		mainFrame.setLayout(new GridLayout(rows, columns, separation, separation));
+		
+		mainFrame.setLayout(new BorderLayout());
+		
+		topPanel = new JPanel();
+		midPanel = new JPanel();
+		bottomPanel = new JPanel();
 		
 		keySearch = new JLabel("Keyword Search:");
 		searchTextField = new JTextField();
@@ -93,23 +102,27 @@ public class EditorGui extends JFrame {
 		saveAsButton = new JButton("Save as");
 		saveAsButton.addActionListener(new SaveAsButtonListener());
 		
-		mainFrame.add(keySearch);
-		mainFrame.add(searchTextField);
-		mainFrame.add(searchResultsLabel);
-		mainFrame.add(searchResultsTextArea);
-		mainFrame.add(studyListLabel);
-		mainFrame.add(listScroll);
-		mainFrame.add(new JPanel());
-		mainFrame.add(deleteButton);
-		mainFrame.add(new JPanel());
-		mainFrame.add(addButton);
-		mainFrame.add(new JPanel());
-		mainFrame.add(editButton);
-		mainFrame.add(saveButton);
-		mainFrame.add(saveAsButton);
+		topPanel.setLayout(new GridLayout(2,2,10,10));
+		topPanel.add(keySearch);
+		topPanel.add(searchTextField);
+		topPanel.add(searchResultsLabel);
+		topPanel.add(searchResultsTextArea);
+		
+		midPanel.add(studyListLabel);
+		midPanel.add(listScroll);
+		
+		bottomPanel.add(deleteButton);
+		bottomPanel.add(addButton);
+		bottomPanel.add(editButton);
+		bottomPanel.add(saveButton);
+		bottomPanel.add(saveAsButton);
+
+		mainFrame.add(topPanel, BorderLayout.NORTH);
+		mainFrame.add(midPanel, BorderLayout.CENTER);
+		mainFrame.add(bottomPanel, BorderLayout.SOUTH);
 		
 		searchResultsTextArea.setEditable(false);
-		listScroll.setSize(100, 100);
+		listScroll.setSize(200, 300);
 		
 		mainFrame.setDefaultCloseOperation(mainFrame.EXIT_ON_CLOSE);
 		
@@ -118,7 +131,7 @@ public class EditorGui extends JFrame {
 	
 	public void createEditWindow() {
 		editWindow = new JFrame();
-		editWindow.setSize(300, 200);
+		editWindow.setSize(260, 150);
 		editWindow.setVisible(true);
 		editWindow.setLayout(new GridLayout(3, 2, 10, 10));
 		editWindow.setTitle("Edit an Item");
@@ -146,12 +159,11 @@ public class EditorGui extends JFrame {
 		}
 		editStimulusText.setText(itemToEdit.getStimulus());
 		editResponseText.setText(itemToEdit.getResponse());
-		
 	}
 	
 	public void createAddWindow() {
 		addWindow = new JFrame();
-		addWindow.setSize(300, 200);
+		addWindow.setSize(200, 150);
 		addWindow.setVisible(true);
 		addWindow.setLayout(new GridLayout(3, 2, 10, 10));
 		addWindow.setTitle("Edit an Item");
@@ -191,7 +203,7 @@ public class EditorGui extends JFrame {
 			searchResultsTextArea.setText(foundItem.toString());
 			studyListDisplay.setSelectedIndex(studyList.itemArrayList.indexOf(foundItem));
 		} catch (IllegalArgumentException e) {
-			JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+			JOptionPane.showMessageDialog(null, "Nothing found.\nCheck your spelling and try again.");
 		}
 	}
 	
