@@ -73,6 +73,7 @@ public class EditorGui extends JFrame {
 		
 		keySearch = new JLabel("Keyword Search:");
 		searchTextField = new JTextField();
+		searchTextField.addActionListener(new SearchTextFieldListener());
 		searchResultsLabel = new JLabel("Results:");
 		searchResultsTextArea = new JTextArea();
 		studyListLabel = new JLabel("Study List:");
@@ -183,6 +184,17 @@ public class EditorGui extends JFrame {
 		studyListDisplay.setListData(studyList.createStringArray());
 	}
 	
+	public void findItem() {
+		String stringToFind = searchTextField.getText();
+		try{
+			Item foundItem = studyList.find(stringToFind);
+			searchResultsTextArea.setText(foundItem.toString());
+			studyListDisplay.setSelectedIndex(studyList.itemArrayList.indexOf(foundItem));
+		} catch (IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+		}
+	}
+	
 	class SaveChangesButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -227,6 +239,14 @@ public class EditorGui extends JFrame {
 		}
 	}
 	
+	class SearchTextFieldListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			findItem();			
+		}
+		
+	}
 	
 	class SaveButtonListener implements ActionListener {
 

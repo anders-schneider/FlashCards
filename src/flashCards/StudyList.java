@@ -25,9 +25,9 @@ public class StudyList {
     
     public Item find(String stimulusOrResponse) throws IllegalArgumentException {
     	for (int i = 0; i < itemArrayList.size(); i++) {
-    		if (itemArrayList.get(i).getStimulus() == stimulusOrResponse) {
+    		if (itemArrayList.get(i).getStimulus().equals(stimulusOrResponse)) {
     			return itemArrayList.get(i);
-    		} else if (itemArrayList.get(i).getResponse() == stimulusOrResponse) {
+    		} else if (itemArrayList.get(i).getResponse().equals(stimulusOrResponse)) {
     			return itemArrayList.get(i);
     		}
     	}
