@@ -40,6 +40,7 @@ public class Item {
         return timesCorrect;
     }
     
+    /* If the function is asked to set the timesLearned to above 3, it will also note that the item has been learned */
     public void setTimesCorrect(int times) {
         timesCorrect = times;
         if (timesCorrect >= 4) {

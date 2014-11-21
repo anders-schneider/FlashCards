@@ -49,6 +49,7 @@ public class StudyGui extends JFrame {
     	new StudyGui().createStartWindow();
     }
     
+    /* Start window simply prompts the user to load the desired study list in */
     void createStartWindow(){
     	startWindow = new JFrame();
     	startWindow.setSize(200, 100);
@@ -74,6 +75,7 @@ public class StudyGui extends JFrame {
 		}
     }
     
+    /* The main window is where the user reviews the cards and studies */
     void createMainWindow(){
     	mainWindow = new JFrame();
     	mainWindow.setSize(260, 300);
@@ -127,6 +129,10 @@ public class StudyGui extends JFrame {
     	study();
     }
 
+    /* Every time the user is to be shown a new stimulus, the study method is called.
+     * It checks if the user has learned all words and ensures that the user does not see any
+     * stimuli it has already learned.
+     */
 	void study() {
 		
 		numItems = studyList.itemArrayList.size();
@@ -166,6 +172,9 @@ public class StudyGui extends JFrame {
 
 	class SubmitButtonListener implements ActionListener {
 
+		/* Determines if the user entered the correct answer and either
+		 * calls study() to display the next item or shows the user the correct answer
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String userResponse = capitalTextField.getText();
@@ -224,7 +233,7 @@ public class StudyGui extends JFrame {
 		}
 	}
 
-	
+	/* The congratulations window is created when the user has successfully learned all words */
 	private void createCongratulations() {
 		congratulationsWindow = new JFrame();
 		String[] options = new String [] {"Save", "Save as", "Quit"};
@@ -246,6 +255,10 @@ public class StudyGui extends JFrame {
 		mainWindow.dispose();
 	}
 
+	/* The bottom panel displays the correct answer for a user who has gotten the
+	 * question incorrect. This bottom panel should no longer be visible after the
+	 * user has corrected his/her mistake.
+	 */
 	public void clearBottomPanel() {
 		incorrectLabel.setText("");
 		userResponseLabel.setText("");
@@ -253,6 +266,7 @@ public class StudyGui extends JFrame {
 		mainWindow.setSize(250, 300);
 	}
 
+	/* Displays the answer in the bottom panel of the main window */
 	public void showAnswer(String userResponse) {
 		mainWindow.setSize(250, 350);
 		incorrectLabel.setText("INCORRECT");

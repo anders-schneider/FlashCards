@@ -19,10 +19,12 @@ public class StudyList {
         itemArrayList = new ArrayList();
     }
     
+    /* Adds an item to the existing studyList */
     public void add(Item item) {
         itemArrayList.add(item);
     }
     
+    /* Takes in a string and outputs the first matching item, or throws an exception if none */
     public Item find(String stimulusOrResponse) throws IllegalArgumentException {
     	for (int i = 0; i < itemArrayList.size(); i++) {
     		if (itemArrayList.get(i).getStimulus().equals(stimulusOrResponse)) {
@@ -34,10 +36,12 @@ public class StudyList {
         throw new IllegalArgumentException ("Nothing found.");
     }
     
+    /* Permanently removes the input Item from the list */
     public void delete(Item item) {
     	itemArrayList.remove(item);
     }
     
+    /* Replaces the input Item with a new item created from the user-provided stimulus and response */
     public void modify(Item item, String newStimulus, String newResponse) {
     	itemArrayList.remove(item);
     	Item newItem = new Item(newStimulus, newResponse);
@@ -45,6 +49,7 @@ public class StudyList {
         
     }
     
+    /* Loads in a text file and creates a study list */
     public void load() throws IOException {
     	ArrayList<String> linesToStudy = SimpleIO.load();
     	for (int i = 0; (i < linesToStudy.size()) && (i < 15); i++) {
@@ -59,6 +64,7 @@ public class StudyList {
             	
     }
     
+    /* Saves the current study list to a text file */
     public void save() throws IOException {
     	ArrayList<String> stringArrayToSave = new ArrayList();
     	for (int i = 0; i <itemArrayList.size(); i++) {
@@ -79,6 +85,7 @@ public class StudyList {
         SimpleIO.saveAs(stringArrayToSave);
     }
     
+    /* Creates a string array that can be displayed in the JList for users to select */
     public String[] createStringArray() {
     	String [] result = new String[itemArrayList.size()];
     	for (int i = 0; i < itemArrayList.size(); i++){
@@ -88,6 +95,7 @@ public class StudyList {
     	return result;
     }
     
+    /* Shuffles the order of the items "slightly" by randomly choosing to perform swaps */
     public void shuffleOrder() {
     	double threshold = 0.5;
     	Item testItem = itemArrayList.get(1);

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * @author Your Name Goes Here
+ * @author Monica Ionescu
  */
 public class EditorGui extends JFrame {
 	
@@ -58,6 +58,7 @@ public class EditorGui extends JFrame {
     	
     }
 
+    /* First the user is prompted to load in a study list. Afterwards, the GUI is created. */
 	private void createWindow() {
 		studyList = new StudyList();
 		
@@ -69,10 +70,6 @@ public class EditorGui extends JFrame {
 		mainFrame = new JFrame();
 		mainFrame.setSize(370, 430);
 		mainFrame.setVisible(true);
-//		int rows = 7;
-//		int columns = 2;
-//		int separation = 30;
-//		mainFrame.setLayout(new GridLayout(rows, columns, separation, separation));
 		
 		mainFrame.setLayout(new BorderLayout());
 		
@@ -125,43 +122,48 @@ public class EditorGui extends JFrame {
 		listScroll.setSize(200, 300);
 		
 		mainFrame.setDefaultCloseOperation(mainFrame.EXIT_ON_CLOSE);
-		
-		
 	}
 	
+	/* When a user wants to edit an item, this window pops up */
 	public void createEditWindow() {
-		editWindow = new JFrame();
-		editWindow.setSize(260, 150);
-		editWindow.setVisible(true);
-		editWindow.setLayout(new GridLayout(3, 2, 10, 10));
-		editWindow.setTitle("Edit an Item");
-		editStimulus = new JLabel("Stimulus:");
-		editResponse = new JLabel("Response:");
-		editStimulusText = new JTextField(10);
-		editResponseText = new JTextField(10);
-		saveChangesButton = new JButton("Save Changes");
-		saveChangesButton.addActionListener(new SaveChangesButtonListener());
-		editWindow.add(editStimulus);
-		editWindow.add(editStimulusText);
-		editWindow.add(editResponse);
-		editWindow.add(editResponseText);
-		editWindow.add(new JPanel());
-		editWindow.add(saveChangesButton);
 		
-		String stringToEdit = studyListDisplay.getSelectedValue();
-		for (int i = 0; i < studyList.itemArrayList.size(); i++) {
-			Item itemToCompare = studyList.itemArrayList.get(i);
-			String stringToCompare = itemToCompare.toString();
-			if (stringToCompare.equals(stringToEdit)) {
-				itemToEdit = itemToCompare;
-				break;
-			}	
+		if (studyListDisplay.getSelectedValue() != null) {
+			editWindow = new JFrame();
+			editWindow.setSize(260, 150);
+			editWindow.setVisible(true);
+			editWindow.setLayout(new GridLayout(3, 2, 10, 10));
+			editWindow.setTitle("Edit an Item");
+			editStimulus = new JLabel("Stimulus:");
+			editResponse = new JLabel("Response:");
+			editStimulusText = new JTextField(10);
+			editResponseText = new JTextField(10);
+			saveChangesButton = new JButton("Save Changes");
+			saveChangesButton.addActionListener(new SaveChangesButtonListener());
+			editWindow.add(editStimulus);
+			editWindow.add(editStimulusText);
+			editWindow.add(editResponse);
+			editWindow.add(editResponseText);
+			editWindow.add(new JPanel());
+			editWindow.add(saveChangesButton);
+			
+			String stringToEdit = studyListDisplay.getSelectedValue();
+			for (int i = 0; i < studyList.itemArrayList.size(); i++) {
+				Item itemToCompare = studyList.itemArrayList.get(i);
+				String stringToCompare = itemToCompare.toString();
+				if (stringToCompare.equals(stringToEdit)) {
+					itemToEdit = itemToCompare;
+					break;
+				}	
+			}
+			editStimulusText.setText(itemToEdit.getStimulus());
+			editResponseText.setText(itemToEdit.getResponse());
+			searchResultsTextArea.setText("");
+		} else {
+			JOptionPane.showMessageDialog(null, "No item selected.");
 		}
-		editStimulusText.setText(itemToEdit.getStimulus());
-		editResponseText.setText(itemToEdit.getResponse());
-		searchResultsTextArea.setText("");
 	}
 	
+	/* When a user clicks the "Add" button, this window pops up */
 	public void createAddWindow() {
 		addWindow = new JFrame();
 		addWindow.setSize(200, 150);
@@ -182,6 +184,7 @@ public class EditorGui extends JFrame {
 		addWindow.add(addItemButton);
 	}
 	
+	/* This method permanently deletes the highlighted item) */
 	public void deleteItem() {
 		String stringToDelete = studyListDisplay.getSelectedValue();
 		for (int i = 0; i < studyList.itemArrayList.size(); i++) {
@@ -196,6 +199,9 @@ public class EditorGui extends JFrame {
 		studyListDisplay.setListData(studyList.createStringArray());
 	}
 	
+	/* Searches for the item based on user input. If no items match the input, a 
+	 * window pops up alerting the user that there are no such items.
+	 */
 	public void findItem() {
 		String stringToFind = searchTextField.getText();
 		try{
@@ -207,6 +213,7 @@ public class EditorGui extends JFrame {
 		}
 	}
 	
+	/* Completes the process of editing an item by creating a new item from user input */
 	class SaveChangesButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -218,6 +225,7 @@ public class EditorGui extends JFrame {
 		}
 	}
 	
+	/* Completes the process of adding an item by creating a new item from user input */
 	class AddItemButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -286,5 +294,3 @@ public class EditorGui extends JFrame {
 
 	
 }
-
-	
