@@ -150,7 +150,6 @@ public class StudyGui extends JFrame {
 		try{
 			currentItem = studyList.itemArrayList.get(itemIndex);
 		} catch (IndexOutOfBoundsException e) {
-			System.out.println("here");
 			studyList.shuffleOrder();
 			itemIndex = 0;
 			currentItem = studyList.itemArrayList.get(itemIndex);
