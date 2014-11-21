@@ -47,14 +47,13 @@ public class StudyList {
     
     public void load() throws IOException {
     	ArrayList<String> linesToStudy = SimpleIO.load();
-//    	if (linesToStudy == null || linesToStudy.isEmpty()) {
-//    		throw IllegalArgumentException("The file is empty.");
-//    	}
-    	for (int i = 0; i < linesToStudy.size(); i++) {
+    	for (int i = 0; (i < linesToStudy.size()) && (i < 15); i++) {
         	String itemString = linesToStudy.get(i);
         	String[] itemArray = itemString.split(" *\\|\\| *");
         	Item newItem = new Item(itemArray[0].trim(), itemArray[1].trim());
-        	newItem.setTimesCorrect(Integer.parseInt(itemArray[2].trim()));
+        	if (itemArray.length == 3){
+        		newItem.setTimesCorrect(Integer.parseInt(itemArray[2].trim()));
+        	}
         	itemArrayList.add(newItem);
         }
             	
@@ -91,20 +90,15 @@ public class StudyList {
     
     public void shuffleOrder() {
     	double threshold = 0.5;
+    	Item testItem = itemArrayList.get(1);
     	for (int i = 0; i < (itemArrayList.size() - 1); i++) {
-    		if(Math.random() < threshold) {
+    		double rand = Math.random();
+    		if(rand < threshold) {
     			Item temp = itemArrayList.get(i);
     			itemArrayList.set(i, itemArrayList.get(i + 1));
         		itemArrayList.set(i + 1, temp);
     		}
     	}
-    	
-    	
-//    	for (int i = 0; i < (itemArrayList.size() - 1); i += 2){
-//    		Item temp = itemArrayList.get(i);
-//    		itemArrayList.set(i, itemArrayList.get(i + 1));
-//    		itemArrayList.set(i + 1, temp);
-//    	}
     }
     
     @Override

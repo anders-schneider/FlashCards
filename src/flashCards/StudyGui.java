@@ -76,7 +76,7 @@ public class StudyGui extends JFrame {
     
     void createMainWindow(){
     	mainWindow = new JFrame();
-    	mainWindow.setSize(250, 300);
+    	mainWindow.setSize(260, 300);
     	mainWindow.setVisible(true);
     	topPanel = new JPanel();
     	bottomPanel = new JPanel();
@@ -138,11 +138,13 @@ public class StudyGui extends JFrame {
 		}
 		if (allLearned){
 			createCongratulations();
+			return;
 		}
 		
 		try{
 			currentItem = studyList.itemArrayList.get(itemIndex);
 		} catch (IndexOutOfBoundsException e) {
+			System.out.println("here");
 			studyList.shuffleOrder();
 			itemIndex = 0;
 			currentItem = studyList.itemArrayList.get(itemIndex);
@@ -185,6 +187,15 @@ public class StudyGui extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			String[] options = new String [] {"Save", "Quit"};
+			int option = JOptionPane.showOptionDialog(mainWindow, "Save before quitting?", "Option Dialog", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+			if (option == 0) {
+				try {
+					studyList.save();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Oops! The following error ocurred: " + e.getMessage());
+				}
+			}			
 			mainWindow.dispose();
 		}
 	}

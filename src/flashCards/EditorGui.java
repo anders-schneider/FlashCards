@@ -159,6 +159,7 @@ public class EditorGui extends JFrame {
 		}
 		editStimulusText.setText(itemToEdit.getStimulus());
 		editResponseText.setText(itemToEdit.getResponse());
+		searchResultsTextArea.setText("");
 	}
 	
 	public void createAddWindow() {
@@ -179,7 +180,6 @@ public class EditorGui extends JFrame {
 		addWindow.add(addResponseText);
 		addWindow.add(new JPanel());
 		addWindow.add(addItemButton);
-		
 	}
 	
 	public void deleteItem() {
